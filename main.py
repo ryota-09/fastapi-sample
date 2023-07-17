@@ -1,20 +1,29 @@
 from fastapi import FastAPI
-from typing import Optional
+from pydantic import BaseModel, Field
+import datetime
 
-from pydantic import BaseModel
+class Booking(BaseModel):
+  booking_id: int
+  user_id: int
+  booked_num:int
+  start_datetime: datetime.datetime
+  end_datetime: datetime.datetime
+  
+class User(BaseModel):
+  user_id: int
+  user_name: str = Field(max_length=12)
 
-class Item(BaseModel):
-  name: str
-  description: Optional[str] = None
-  price: int
-  tax: Optional[float] = None
-
+class Room(BaseModel):
+  room_id: int
+  room_name: str = Field(max_length=12)
+  capacity: int
 
 app = FastAPI()
 
-# 上から順番に当てはまるパスを探している
+@app.get("/")
+async def index():
+  return { "message": "テストOK" }
 
-# /docs - swaggerUIのドキュメント, /redoc - Webページ用doc
-@app.post("/countries/")
-async def create_item(item: Item):
-  return { "message": f"{item.name}の合計金額は{int(item.price * item.tax)}円です。" }
+@app.post("/users")
+async def users(users: User):
+  return { "user": users }
