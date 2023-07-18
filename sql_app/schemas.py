@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 from pydantic import BaseModel, Field
 import datetime
 
@@ -14,7 +13,7 @@ class Booking(BaseModel):
   
 class User(BaseModel):
   user_id: int
-  user_name: str = Field(max_length=12)
+  username: str = Field(max_length=12)
   
   class Config:
     orm_mode = True
